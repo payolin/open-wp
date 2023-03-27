@@ -8,22 +8,32 @@ static Window root;
 
 #define POSX 500
 #define POSY 500
-#define WIDTH 500
-#define HEIGHT 500
-#define BORDER 15
+#define BORDER 0
 
 int main(){
 
     Window win;
     XEvent event;
 
-    if((disp = XOpenDisplay(NULL)) == NULL){
+    disp = XOpenDisplay(NULL);
+
+    if(disp == NULL){
 	errx(1, "can't open the display");
     }
     scr = DefaultScreen(disp);
     root = RootWindow(disp,scr);
 
-    win = XCreateSimpleWindow(disp,root,POSX,POSY,WIDTH,HEIGHT,BORDER, BlackPixel(disp,scr), WhitePixel(disp,scr));
+    XWindowAttributes getWinAttr;
+    XGetWindowAttributes(disp, root, &getWinAttr);
+
+    XSetWindowAttributes wa;
+    wa.override_redirect = True;
+
+    win = XCreateWindow(disp,root,POSX,POSY,getWinAttr.width,getWinAttr.height,BORDER, BlackPixel(disp,scr), CopyFromParent,
+                              CopyFromParent, 0, &wa);
+
+    XSetWindowBackground(disp, win, WhitePixel(disp,scr));
+
     XMapWindow(disp,win);
 
     while (XNextEvent(disp, &event) == 0){

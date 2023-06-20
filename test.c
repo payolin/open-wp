@@ -48,7 +48,7 @@ int main(){
         return 1;
     }
 
-    FILE *file = fopen("image_to_display.jpeg", "rb");
+    FILE *file = fopen("image_to_display.bmp", "rb");
     if (file == NULL) {
         fprintf(stderr, "Error: Failed to open image file.\n");
         XDestroyImage(image);
